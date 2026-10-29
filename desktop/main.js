@@ -4,6 +4,7 @@ const { app, BrowserWindow, Menu, dialog, shell } = require('electron')
 const { spawn } = require('node:child_process')
 const fs = require('node:fs')
 const net = require('node:net')
+const os = require('node:os')
 const path = require('node:path')
 
 const isDev = !app.isPackaged
@@ -52,7 +53,11 @@ function startServer(port) {
     process.execPath,
     [dshBin, 'web', '--patch', patchPath, '--no-open', '--port', String(port)],
     {
-      env: { ...process.env, ELECTRON_RUN_AS_NODE: '1' },
+      env: {
+        ...process.env,
+        ELECTRON_RUN_AS_NODE: '1',
+        PATH: [path.join(os.homedir(), '.local', 'bin'), process.env.PATH].filter(Boolean).join(path.delimiter),
+      },
       stdio: ['ignore', 'pipe', 'pipe'],
       windowsHide: true,
     },

@@ -157,3 +157,36 @@ Electron is pinned to **44.7.0**. dsh's native module loader accepts only
 boot with `unsupported Electron runtime fingerprint`.
 
 The shell is not code-signed, so Windows SmartScreen may warn on first launch.
+
+## Native computer use
+
+Ligui can drive the actual Windows desktop — not a browser tab. The
+`mcp-windows` row mounts [Windows-MCP](https://github.com/CursorTouch/Windows-MCP)
+as an MCP server, so the model gets tools to:
+
+- launch, switch, move, and resize applications (`App`)
+- see the desktop as a UI tree (`Snapshot`) or an image (`Screenshot`)
+- click, type, scroll, move, and press shortcuts (`Click`, `Type`, `Scroll`, `Move`, `Shortcut`)
+- wait for text, windows, or elements (`Wait`, `WaitFor`)
+- run PowerShell and manage processes (`PowerShell`, `Process`)
+
+Install the server once:
+
+```sh
+uv tool install windows-mcp
+```
+
+`uv` installs Python 3.14 for it when needed. The desktop shell adds
+`%USERPROFILE%\.local\bin` to the server PATH; a CLI launch needs
+`windows-mcp` on `PATH`.
+
+The tools appear as `mcp__windows__Screenshot`, `mcp__windows__Snapshot`,
+`mcp__windows__Click`, `mcp__windows__Type`, `mcp__windows__App`, and so on.
+`Snapshot` is the text-friendly path and works with text-only models;
+`Screenshot` needs a vision-capable model.
+
+Windows-MCP has a **user takeover** gate: moving the physical mouse or pressing
+`Ctrl+Alt+Shift+Backspace` returns control to you. It is full desktop control,
+not a sandbox — the agent can launch apps, type into anything, run PowerShell,
+read the clipboard, and change files. Only use it with prompts and models you
+trust; prefer a disposable VM for untrusted work.
