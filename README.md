@@ -4,16 +4,18 @@ Ligui is a thin, model-agnostic agent built on
 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) (`dsh`).
 
 This repository is a **dsh bundle**, not a fork. It composes the published
-harness and contributes one patch layer: the agent's identity and the model
-routes it exposes. Upstream stays upstream, so a `dsh` upgrade is a dependency
-update rather than a merge.
+harness and contributes one patch layer: the agent's identity, the model routes
+it exposes, and its Web theme. Upstream stays upstream, so a `dsh` upgrade is a
+dependency update rather than a merge.
 
 ## What's in the box
 
 | File | Purpose |
 |---|---|
-| `cordis.patch.yml` | The composition layer: persona + provider routes |
-| `package.json` | The `dsh.bundle` manifest |
+| `cordis.patch.yml` | The composition layer: persona, provider routes, theme row |
+| `client.js` | Browser half: the Ligui theme's `--dsw-*` token layer |
+| `index.js` | Node half: the empty Loader row the client scanner keys on |
+| `package.json` | The `dsh.bundle` + `dsh.client` manifest |
 | `examples/custom-routes.example.yml` | Shapes for OpenAI Chat/Responses and Anthropic Messages gateways |
 
 ## Requirements
@@ -88,6 +90,25 @@ If the model's wire format is not OpenAI Chat, OpenAI Responses, or Anthropic
 Messages, implement an `LlmAdapter` and register it on `ctx.llm`; no fork is
 needed. Start from the upstream guide:
 [LLM adapters](https://github.com/deepseek-ai/deepseek-harness/blob/main/docs/user/develop/practice/llm-adapter.md).
+
+## Theme
+
+The Web UI boots with a Ligui skin: near-black, green-tinted surfaces, one acid
+green accent, tighter corners (3–18px instead of the stock 4–28px), and faster
+motion (0.09s / 0.14s / 0.22s instead of 0.1s / 0.2s / 0.3s).
+
+`client.js` registers one `ctx.theme.overrideTokens` layer over the active
+palette. It never changes the user's preference, so **Settings → General →
+Appearance** keeps working in light, dark, and system mode. There is no build
+step: `dsh.client` serves the browser half as-is.
+
+To tune the skin, edit `TOKENS` in `client.js` and reload the page. Every value
+must be a `{ light, dark }` pair; `overrideTokens` rejects a bare string so a
+scheme switch can never make the UI illegible.
+
+The theme does not replace the product wordmark: the sidebar still reads
+"DeepSeek Harness". Changing that needs a slot registration (a React client
+plugin), which this repo does not ship yet.
 
 ## Upgrading dsh
 

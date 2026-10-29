@@ -12,8 +12,16 @@
     "deepseek-harness",
     "agent"
   ],
+  "main": "index.js",
+  "exports": {
+    ".": "./index.js",
+    "./client": "./client.js",
+    "./package.json": "./package.json"
+  },
   "files": [
-    "cordis.patch.yml"
+    "cordis.patch.yml",
+    "index.js",
+    "client.js"
   ],
   "engines": {
     "dsh": ">=0.2.0 <0.3.0",
@@ -22,6 +30,12 @@
   "dsh": {
     "bundle": {
       "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web",
+      "inject": [
+        "@deepseek-ai/dsh-client-ui-theme"
+      ]
     }
   }
 }

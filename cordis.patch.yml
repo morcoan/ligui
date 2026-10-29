@@ -52,3 +52,12 @@
 #   cerebras:  CEREBRAS_API_KEY
 #   together:  TOGETHER_API_KEY
 #   fireworks: FIREWORKS_API_KEY
+
+# ── Client theme ────────────────────────────────────────────────────────────
+#
+# The package is both the bundle and the browser plugin: the empty Node half
+# gives the Loader a row, and dsh.client serves ./client.js to the Web UI.
+
+- insert:
+    - id: ligui-theme
+      name: ./index.js
