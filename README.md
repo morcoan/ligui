@@ -126,3 +126,34 @@ npx -y @deepseek-ai/dsh@alpha --profile ligui --dump-config
 ## License
 
 Not chosen yet. The upstream harness is MIT.
+
+## Desktop
+
+The `desktop/` folder is a thin Electron shell. It starts the bundled dsh
+runtime on a free loopback port, reads the token URL from its output, and loads
+Ligui in a native window — no browser tab and no browser chrome.
+
+It shares `~/.dsh` with the CLI, so sessions, workspaces, and settings are the
+same in both.
+
+**Prerequisites:** Node.js 24+, npm.
+
+```sh
+cd desktop
+npm install
+npm install --prefix runtime @deepseek-ai/dsh@alpha
+npm start            # development window
+npm run dist         # portable Windows exe in desktop/dist
+```
+
+The build produces:
+
+- `desktop/dist/win-unpacked/Ligui.exe` — instant launch, keep the folder together
+- `desktop/dist/Ligui-0.1.0-portable.exe` — one file, but it self-extracts the
+  bundled runtime on first launch, which takes minutes
+
+Electron is pinned to **44.7.0**. dsh's native module loader accepts only
+43.0.0, 44.0.0, 44.7.0, and 45.0.0-alpha.6; any other Electron build fails at
+boot with `unsupported Electron runtime fingerprint`.
+
+The shell is not code-signed, so Windows SmartScreen may warn on first launch.

@@ -1,0 +1,73 @@
+{
+  "name": "ligui-desktop",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Ligui desktop window",
+  "main": "main.js",
+  "author": "morcoan",
+  "license": "UNLICENSED",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder --win portable"
+  },
+  "devDependencies": {
+    "electron": "44.7.0",
+    "electron-builder": "26.18.0"
+  },
+  "build": {
+    "appId": "com.morcoan.ligui",
+    "productName": "Ligui",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "main.js",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "runtime",
+        "filter": [
+          "**/*"
+        ],
+        "to": "runtime"
+      },
+      {
+        "from": "runtime/node_modules",
+        "to": "runtime/node_modules",
+        "filter": [
+          "**/*"
+        ]
+      },
+      {
+        "from": "../cordis.patch.yml",
+        "to": "ligui/cordis.patch.yml"
+      },
+      {
+        "from": "../index.js",
+        "to": "ligui/index.js"
+      },
+      {
+        "from": "../client.js",
+        "to": "ligui/client.js"
+      },
+      {
+        "from": "../package.json",
+        "to": "ligui/package.json"
+      }
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    },
+    "portable": {
+      "artifactName": "Ligui-${version}-portable.exe"
+    }
+  }
+}
