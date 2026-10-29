@@ -1,0 +1,43 @@
+# Reference shapes for gateways that are not in the installed pi-ai catalog.
+#
+# This file is NOT loaded by the bundle and is NOT a drop-in overlay: a
+# `cordis.patch.yml` row replaces the whole `providers` map. Copy the route you
+# need into the `providers` block of `cordis.patch.yml` (or into your profile's
+# own patch, restating every route you want to keep).
+#
+# One provider speaks one wire protocol. A gateway that serves two protocols
+# needs two provider ids.
+
+- id: llm-pi-ai
+  config:
+    providers:
+      acme-openai-chat:
+        displayName: Acme (Chat Completions)
+        api: openai-completions
+        baseURL: https://gateway.acme.example/v1
+        apiKeyEnv: ACME_API_KEY
+        models:
+          - id: acme-think
+            name: Acme Think
+            contextWindow: 262144
+            reasoningEfforts:
+              off:
+              high: high
+
+      acme-openai-responses:
+        displayName: Acme (Responses)
+        api: openai-responses
+        baseURL: https://gateway.acme.example/v1
+        apiKeyEnv: ACME_API_KEY
+        models:
+          - id: acme-responses
+            name: Acme Responses
+
+      acme-anthropic:
+        displayName: Acme (Anthropic Messages)
+        api: anthropic-messages
+        baseURL: https://anthropic.acme.example
+        apiKeyEnv: ACME_ANTHROPIC_KEY
+        models:
+          - id: acme-claude-compatible
+            name: Acme Claude-compatible

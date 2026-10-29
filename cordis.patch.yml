@@ -1,0 +1,54 @@
+# Ligui — a thin composition layer over @deepseek-ai/dsh-base.
+#
+# Every row here either overrides a row mounted by an earlier bundle or inserts
+# a new one. A config override replaces the row's whole config, so restate any
+# field you intend to keep.
+#
+# This file is both:
+#   - the patch of the dsh-ligui bundle (`dsh plugin --profile ligui add .`)
+#   - a standalone overlay (`dsh web --patch ./cordis.patch.yml`)
+
+# ── Identity ────────────────────────────────────────────────────────────────
+
+- id: system-prompt
+  config:
+    personaPrefix: >-
+      Your deployment name is Ligui. You are a coding agent powered by the
+      {{model}} model.
+
+# ── Model routes ────────────────────────────────────────────────────────────
+#
+# dsh-base mounts @deepseek-ai/dsh-llm-pi-ai dormant. These routes activate its
+# built-in catalog entries; endpoint, protocol, and model list come from the
+# installed pi-ai catalog, so no URLs or model ids are repeated here.
+#
+# A route whose env var is unset still appears in the model picker; its
+# requests fail with MISSING_CREDENTIAL until a key is supplied through the
+# environment or Settings → Models (saved credentials outrank the env).
+#
+# The native DeepSeek route (deepseek-official) is mounted by dsh-base and
+# reads DEEPSEEK_API_KEY; it is deliberately not duplicated here.
+
+- id: llm-pi-ai
+  config:
+    providers:
+      openai:
+        apiKeyEnv: OPENAI_API_KEY
+      anthropic:
+        apiKeyEnv: ANTHROPIC_API_KEY
+      google:
+        apiKeyEnv: GEMINI_API_KEY
+      openrouter:
+        apiKeyEnv: OPENROUTER_API_KEY
+      moonshotai:
+        apiKeyEnv: MOONSHOT_API_KEY
+      zai:
+        apiKeyEnv: ZAI_API_KEY
+#
+# More catalog routes are one entry away; these are key-based:
+#   xai:       XAI_API_KEY
+#   mistral:   MISTRAL_API_KEY
+#   groq:      GROQ_API_KEY
+#   cerebras:  CEREBRAS_API_KEY
+#   together:  TOGETHER_API_KEY
+#   fireworks: FIREWORKS_API_KEY

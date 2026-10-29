@@ -1,0 +1,27 @@
+{
+  "name": "dsh-ligui",
+  "version": "0.1.0",
+  "description": "Ligui: a thin, model-agnostic composition layer for DeepSeek Harness",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/morcoan/ligui.git"
+  },
+  "keywords": [
+    "dsh-plugin",
+    "deepseek-harness",
+    "agent"
+  ],
+  "files": [
+    "cordis.patch.yml"
+  ],
+  "engines": {
+    "dsh": ">=0.2.0 <0.3.0",
+    "node": ">=24.9.0"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  }
+}
