@@ -341,17 +341,18 @@ graph, not embeddings.
 
 ## Window and branding
 
-The Electron window is frameless on Windows. `desktop/preload.js` turns on
-dsh's Windows caption layout: the page gets a 40px top strip with a drag
-region, and the native minimize, maximize, and close controls sit inside it, so
-there is no separate Windows title bar. `desktop/main.js` uses
-`titleBarStyle: 'hidden'` with a matching `titleBarOverlay`.
+The Electron window is frameless on Windows (`frame: false`). `client.js` draws
+the 40px title strip and its own minimize, maximize/restore, and close buttons;
+`desktop/preload.js` exposes the window IPC bridge, and `desktop/main.js` owns
+the handlers. The strip is a drag region with a green hairline, and
+`data-windows-titlebar` pads the dsh columns below it.
 
-`client.js` replaces the official DeepSeek brand occupants in the sidebar and
-conversation hero with the Ligui ghost mark and wordmark, and the
-`ui-brand-official` row is disabled in the patch. The top strip carries a small
-LIGUI label.
+The brand is **厉鬼** in the sidebar and conversation hero, with a ghost mark
+and a small **LIGUI** label. The title strip carries `● LIGUI`; the window and
+taskbar title is 厉鬼. The official DeepSeek brand occupants are disabled, and a
+small brand-text pass renames the first-run “DeepSeek account/Harness” copy at
+runtime.
 
-Still DeepSeek-flavored: the first-run “Get started” modal uses the DeepSeek
-account copy, and the taskbar icon is Electron's default. Both are separate
-branding passes.
+The app menu is removed; F12 toggles DevTools and Ctrl+R reloads. Still
+default: the taskbar icon is Electron's; a custom `.ico` is the remaining
+branding step.

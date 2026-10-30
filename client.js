@@ -127,15 +127,34 @@ window.__ModuleLoader__.load({
     }
 
     function LiguiName() {
-      return jsx('span', {
+      return jsxs('span', {
         style: {
-          fontWeight: 650,
-          letterSpacing: '0.16em',
-          fontSize: '0.8rem',
-          lineHeight: 1,
-          textTransform: 'uppercase',
+          display: 'inline-flex',
+          alignItems: 'baseline',
+          gap: '7px',
+          fontFamily: '"KaiTi", "STKaiti", "SimSun", serif',
         },
-        children: 'LIGUI',
+        children: [
+          jsx('span', {
+            style: {
+              fontSize: '1.12rem',
+              fontWeight: 700,
+              letterSpacing: '0.08em',
+              color: 'var(--dsw-alias-label-primary)',
+            },
+            children: '厉鬼',
+          }),
+          jsx('span', {
+            style: {
+              fontFamily: 'ui-monospace, SFMono-Regular, Menlo, monospace',
+              fontSize: '0.55rem',
+              fontWeight: 600,
+              letterSpacing: '0.2em',
+              color: 'var(--dsw-alias-label-tertiary)',
+            },
+            children: 'LIGUI',
+          }),
+        ],
       })
     }
     /**
@@ -152,18 +171,105 @@ window.__ModuleLoader__.load({
             yield ctx.slots.register({ name: 'conversation.hero.brand.mark' }, LiguiMark)
           })))
       ctx.effect(() => {
-        if (!document.documentElement.hasAttribute('data-windows-titlebar')) return
-        const style = document.createElement('style')
-        style.textContent = '#ligui-titlebar-label{position:fixed;top:0;left:0;height:var(--dsh-windows-titlebar-height,40px);display:flex;align-items:center;padding-left:18px;z-index:2147483000;pointer-events:none;user-select:none;font:600 10px/1 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.22em;color:var(--dsw-alias-label-tertiary,#7c887f)}#ligui-titlebar-dot{width:6px;height:6px;border-radius:50%;background:var(--dsw-alias-brand-primary,#b8ff3d);margin-right:9px}'
-        const label = document.createElement('div')
-        label.id = 'ligui-titlebar-label'
-        const dot = document.createElement('span')
-        dot.id = 'ligui-titlebar-dot'
-        label.append(dot, document.createTextNode('LIGUI'))
-        document.head.appendChild(style)
-        document.body.appendChild(label)
+        const pairs = [
+          ['DeepSeek Harness', 'Ligui'],
+          ['DeepSeek account', 'model provider account'],
+        ]
+        const replace = () => {
+          const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT)
+          let node = walker.nextNode()
+          while (node) {
+            let value = node.nodeValue
+            for (const pair of pairs) {
+              if (value.includes(pair[0])) value = value.split(pair[0]).join(pair[1])
+            }
+            if (value !== node.nodeValue) node.nodeValue = value
+            node = walker.nextNode()
+          }
+        }
+        const timers = [400, 1200, 3000, 6000].map((ms) => setTimeout(replace, ms))
         return () => {
-          label.remove()
+          for (const timer of timers) clearTimeout(timer)
+        }
+      })
+      ctx.effect(() => {
+        const api = window.ligui && window.ligui.window
+        if (!api) return
+        const style = document.createElement('style')
+        style.textContent = `#ligui-titlebar{position:fixed;top:0;left:0;right:0;height:var(--dsh-windows-titlebar-height,40px);display:flex;align-items:center;justify-content:space-between;z-index:2147483000;background:linear-gradient(90deg,rgba(184,255,61,.07) 0%,rgba(184,255,61,0) 32%),var(--dsw-specific-sidebar-fill,#0d100e);border-bottom:1px solid var(--dsw-alias-border-l1,rgba(255,255,255,.08));box-shadow:inset 0 -1px 0 rgba(184,255,61,.14);-webkit-app-region:drag;user-select:none}
+#ligui-titlebar .ligui-titlebar-brand{display:flex;align-items:baseline;gap:9px;padding-left:16px;pointer-events:none;white-space:nowrap}
+#ligui-titlebar .ligui-titlebar-dot{width:6px;height:6px;border-radius:50%;background:var(--dsw-alias-brand-primary,#b8ff3d);box-shadow:0 0 10px rgba(184,255,61,.45);align-self:center}
+#ligui-titlebar .ligui-titlebar-latin{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:9px;font-weight:600;letter-spacing:.22em;color:var(--dsw-alias-label-tertiary,#7c887f)}
+#ligui-titlebar .ligui-titlebar-controls{display:flex;height:100%;-webkit-app-region:no-drag}
+#ligui-titlebar .ligui-titlebar-button{width:46px;height:100%;display:flex;align-items:center;justify-content:center;border:0;background:transparent;color:var(--dsw-alias-label-secondary,#a3afa6);cursor:pointer;padding:0;transition:background var(--ds-transition-duration-fast,.09s) var(--ds-ease-in-out),color var(--ds-transition-duration-fast,.09s)}
+#ligui-titlebar .ligui-titlebar-button:hover{background:var(--dsw-alias-interactive-bg-hover,rgba(184,255,61,.08));color:var(--dsw-alias-label-primary,#e8eee9)}
+#ligui-titlebar .ligui-titlebar-close:hover{background:var(--dsw-alias-state-error-primary,#c02f2f);color:#fff}
+#ligui-titlebar .ligui-titlebar-button svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:1.2;stroke-linecap:round}
+#ligui-titlebar .ligui-titlebar-close svg{width:10px;height:10px}
+#ligui-frame{position:fixed;inset:0;border:1px solid var(--dsw-alias-border-l1,rgba(255,255,255,.08));pointer-events:none;z-index:2147483001;box-sizing:border-box}`
+        const bar = document.createElement('div')
+        bar.id = 'ligui-titlebar'
+        const brand = document.createElement('div')
+        brand.className = 'ligui-titlebar-brand'
+        const dot = document.createElement('span')
+        dot.className = 'ligui-titlebar-dot'
+        const latin = document.createElement('span')
+        latin.className = 'ligui-titlebar-latin'
+        latin.textContent = 'LIGUI'
+        brand.append(dot, latin)
+
+        const makeButton = (kind, label, svg) => {
+          const button = document.createElement('button')
+          button.type = 'button'
+          button.className = 'ligui-titlebar-button ligui-titlebar-' + kind
+          button.setAttribute('aria-label', label)
+          button.innerHTML = svg
+          return button
+        }
+        const MIN_SVG = '<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2 6h8"/></svg>'
+        const MAX_SVG = '<svg viewBox="0 0 12 12" aria-hidden="true"><rect x="2.2" y="2.2" width="7.6" height="7.6" rx="0.6"/></svg>'
+        const RESTORE_SVG = '<svg viewBox="0 0 12 12" aria-hidden="true"><rect x="2" y="3.6" width="6.4" height="6.4" rx="0.6"/><path d="M4.2 3.6V2.2h5.6v5.6H8.6"/></svg>'
+        const CLOSE_SVG = '<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 2.5l7 7M9.5 2.5l-7 7"/></svg>'
+        const minimize = makeButton('min', 'Minimize', MIN_SVG)
+        const maximize = makeButton('max', 'Maximize', MAX_SVG)
+        const close = makeButton('close', 'Close', CLOSE_SVG)
+        const controls = document.createElement('div')
+        controls.className = 'ligui-titlebar-controls'
+        controls.append(minimize, maximize, close)
+        bar.append(brand, controls)
+
+        const frame = document.createElement('div')
+        frame.id = 'ligui-frame'
+        document.head.appendChild(style)
+        document.body.append(bar, frame)
+
+        const setMaximized = (value) => {
+          maximize.innerHTML = value ? RESTORE_SVG : MAX_SVG
+          maximize.setAttribute('aria-label', value ? 'Restore' : 'Maximize')
+        }
+        api.isMaximized().then(setMaximized).catch(() => {})
+        const off = typeof api.onMaximized === 'function' ? api.onMaximized(setMaximized) : null
+
+        const onMinimize = () => api.minimize()
+        const onMaximize = () => api.toggleMaximize()
+        const onClose = () => api.close()
+        const onDoubleClick = (event) => {
+          if (event.target.closest('button')) return
+          api.toggleMaximize()
+        }
+        minimize.addEventListener('click', onMinimize)
+        maximize.addEventListener('click', onMaximize)
+        close.addEventListener('click', onClose)
+        bar.addEventListener('dblclick', onDoubleClick)
+
+        return () => {
+          if (typeof off === 'function') off()
+          minimize.removeEventListener('click', onMinimize)
+          maximize.removeEventListener('click', onMaximize)
+          close.removeEventListener('click', onClose)
+          bar.removeEventListener('dblclick', onDoubleClick)
+          bar.remove()
+          frame.remove()
           style.remove()
         }
       })

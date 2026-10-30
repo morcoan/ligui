@@ -1,6 +1,6 @@
 'use strict'
 
-const { app, BrowserWindow, Menu, dialog, shell } = require('electron')
+const { app, BrowserWindow, Menu, dialog, ipcMain, shell } = require('electron')
 const { spawn } = require('node:child_process')
 const fs = require('node:fs')
 const net = require('node:net')
@@ -119,7 +119,21 @@ async function start() {
     app.quit()
   })
 
+  bindWindowIpc()
   createWindow(url)
+}
+function bindWindowIpc() {
+  ipcMain.handle('ligui:window-state', (event) => {
+    if (!win || win.isDestroyed() || event.sender !== win.webContents) return false
+    return win.isMaximized()
+  })
+
+  ipcMain.on('ligui:window-action', (event, action) => {
+    if (!win || win.isDestroyed() || event.sender !== win.webContents) return
+    if (action === 'minimize') win.minimize()
+    else if (action === 'maximize') win.isMaximized() ? win.unmaximize() : win.maximize()
+    else if (action === 'close') win.close()
+  })
 }
 
 function createWindow(url) {
@@ -130,13 +144,10 @@ function createWindow(url) {
     height: 900,
     minWidth: 980,
     minHeight: 640,
-    title: 'Ligui',
+    title: '厉鬼',
     backgroundColor: '#0a0d0b',
-    ...(process.platform === 'win32' ? {
-      titleBarStyle: 'hidden',
-      titleBarOverlay: { height: 40, color: '#0d100e', symbolColor: '#e8eee9' },
-    } : {}),
-    ...(process.platform === 'darwin' ? { titleBarStyle: 'hiddenInset' } : {}),
+    frame: false,
+    hasShadow: true,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       contextIsolation: true,
@@ -149,6 +160,13 @@ function createWindow(url) {
   win.on('closed', () => {
     win = null
   })
+
+  const sendMaximized = () => {
+    if (!win || win.isDestroyed()) return
+    win.webContents.send('ligui:maximized', win.isMaximized())
+  }
+  win.on('maximize', sendMaximized)
+  win.on('unmaximize', sendMaximized)
 
   win.webContents.setWindowOpenHandler(({ url: target }) => {
     if (/^https?:/i.test(target)) void shell.openExternal(target)
