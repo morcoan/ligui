@@ -153,3 +153,8 @@
         env:
           MEMORY_FILE_PATH: !!js dshHomePath('ligui-memory.jsonl')
         toolCallTimeoutMs: 30000
+
+# ── Branding ────────────────────────────────────────────────────────────────
+# client.js fills the sidebar and hero brand slots with Ligui's ghost mark.
+- id: ui-brand-official
+  disabled: true

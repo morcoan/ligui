@@ -338,3 +338,20 @@ This is deliberate memory, not fine-tuning or automatic summarization. The
 agent must search before a task and write after learning; the persona and the
 two skills tell it to. Retrieval is case-insensitive substring search over the
 graph, not embeddings.
+
+## Window and branding
+
+The Electron window is frameless on Windows. `desktop/preload.js` turns on
+dsh's Windows caption layout: the page gets a 40px top strip with a drag
+region, and the native minimize, maximize, and close controls sit inside it, so
+there is no separate Windows title bar. `desktop/main.js` uses
+`titleBarStyle: 'hidden'` with a matching `titleBarOverlay`.
+
+`client.js` replaces the official DeepSeek brand occupants in the sidebar and
+conversation hero with the Ligui ghost mark and wordmark, and the
+`ui-brand-official` row is disabled in the patch. The top strip carries a small
+LIGUI label.
+
+Still DeepSeek-flavored: the first-run “Get started” modal uses the DeepSeek
+account copy, and the taskbar icon is Electron's default. Both are separate
+branding passes.

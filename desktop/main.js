@@ -123,20 +123,7 @@ async function start() {
 }
 
 function createWindow(url) {
-  Menu.setApplicationMenu(Menu.buildFromTemplate([
-    { label: 'File', submenu: [{ role: 'quit' }] },
-    {
-      label: 'View',
-      submenu: [
-        { role: 'reload' },
-        { role: 'toggleDevTools' },
-        { type: 'separator' },
-        { role: 'resetZoom' },
-        { role: 'zoomIn' },
-        { role: 'zoomOut' },
-      ],
-    },
-  ]))
+  Menu.setApplicationMenu(null)
 
   win = new BrowserWindow({
     width: 1440,
@@ -145,8 +132,13 @@ function createWindow(url) {
     minHeight: 640,
     title: 'Ligui',
     backgroundColor: '#0a0d0b',
-    autoHideMenuBar: true,
+    ...(process.platform === 'win32' ? {
+      titleBarStyle: 'hidden',
+      titleBarOverlay: { height: 40, color: '#0d100e', symbolColor: '#e8eee9' },
+    } : {}),
+    ...(process.platform === 'darwin' ? { titleBarStyle: 'hiddenInset' } : {}),
     webPreferences: {
+      preload: path.join(__dirname, 'preload.js'),
       contextIsolation: true,
       nodeIntegration: false,
       sandbox: true,
@@ -164,6 +156,22 @@ function createWindow(url) {
   })
 
   win.loadURL(url)
+
+  if (process.env.LIGUI_DEBUG_WINDOW) {
+    console.log('[ligui] bounds', JSON.stringify(win.getBounds()), 'content', JSON.stringify(win.getContentBounds()))
+  }
+
+  win.webContents.on('before-input-event', (event, input) => {
+    const key = String(input.key || '').toLowerCase()
+    if (input.type !== 'keyDown') return
+    if (input.key === 'F12' || (input.control && input.shift && key === 'i')) {
+      event.preventDefault()
+      win.webContents.toggleDevTools()
+    } else if (input.control && key === 'r') {
+      event.preventDefault()
+      win.webContents.reload()
+    }
+  })
 
   const shot = process.env.LIGUI_SCREENSHOT
   if (shot) {

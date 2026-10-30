@@ -22,7 +22,8 @@
     },
     "files": [
       "main.js",
-      "package.json"
+      "package.json",
+      "preload.js"
     ],
     "extraResources": [
       {

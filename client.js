@@ -10,12 +10,13 @@
  */
 window.__ModuleLoader__.load({
   id: 'dsh-ligui',
-  factory: () => {
+  factory: (require) => {
     const module = { exports: {} }
     const exports = module.exports
+    const { jsx, jsxs } = require('react/jsx-runtime')
 
     /** Required service: the theme registry over the --dsw-* token sheets. */
-    const inject = ['theme']
+    const inject = ['theme', 'slots']
 
     /** Pair one value per palette; repeat a value when the token is invariant. */
     const p = (light, dark) => ({ light, dark })
@@ -101,12 +102,71 @@ window.__ModuleLoader__.load({
       '--ds-ease-in-out': p('cubic-bezier(0.2, 0, 0, 1)', 'cubic-bezier(0.2, 0, 0, 1)'),
     }
 
+    const GHOST_PATH = 'M4 3.5C4 2.67 4.67 2 5.5 2h13c.83 0 1.5.67 1.5 1.5v16.2c0 .42-.48.66-.82.4L16.6 18l-2.2 1.8a.62.62 0 0 1-.79 0L11.4 18l-2.2 1.8a.62.62 0 0 1-.79 0L6.2 18l-1.38 1.1c-.34.26-.82.02-.82-.4V3.5z'
+
+    function LiguiMark(props) {
+      const size = Number(props && props.size) || 22
+      return jsxs('svg', {
+        width: size,
+        height: size,
+        viewBox: '0 0 24 24',
+        className: props && props.className,
+        'aria-hidden': 'true',
+        children: [
+          jsx('path', { d: GHOST_PATH, fill: 'currentColor' }),
+          jsx('rect', {
+            x: 7.4, y: 7.6, width: 2.6, height: 3.4, rx: 0.8,
+            style: { fill: 'var(--dsw-alias-brand-primary, #b8ff3d)' },
+          }),
+          jsx('rect', {
+            x: 14, y: 7.6, width: 2.6, height: 3.4, rx: 0.8,
+            style: { fill: 'var(--dsw-alias-brand-primary, #b8ff3d)' },
+          }),
+        ],
+      })
+    }
+
+    function LiguiName() {
+      return jsx('span', {
+        style: {
+          fontWeight: 650,
+          letterSpacing: '0.16em',
+          fontSize: '0.8rem',
+          lineHeight: 1,
+          textTransform: 'uppercase',
+        },
+        children: 'LIGUI',
+      })
+    }
     /**
      * Stack the Ligui layer over the active palette.
      * @param ctx - client root context (the `theme` service is ready).
      */
     function apply(ctx) {
       ctx.effect(() => ctx.theme.overrideTokens('dsh-ligui', TOKENS))
+      ctx.slots.inject('sidebar.brand.mark', () =>
+        ctx.slots.inject('sidebar.brand.name', () =>
+          ctx.slots.inject('conversation.hero.brand.mark', function* () {
+            yield ctx.slots.register({ name: 'sidebar.brand.mark' }, LiguiMark)
+            yield ctx.slots.register({ name: 'sidebar.brand.name' }, LiguiName)
+            yield ctx.slots.register({ name: 'conversation.hero.brand.mark' }, LiguiMark)
+          })))
+      ctx.effect(() => {
+        if (!document.documentElement.hasAttribute('data-windows-titlebar')) return
+        const style = document.createElement('style')
+        style.textContent = '#ligui-titlebar-label{position:fixed;top:0;left:0;height:var(--dsh-windows-titlebar-height,40px);display:flex;align-items:center;padding-left:18px;z-index:2147483000;pointer-events:none;user-select:none;font:600 10px/1 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.22em;color:var(--dsw-alias-label-tertiary,#7c887f)}#ligui-titlebar-dot{width:6px;height:6px;border-radius:50%;background:var(--dsw-alias-brand-primary,#b8ff3d);margin-right:9px}'
+        const label = document.createElement('div')
+        label.id = 'ligui-titlebar-label'
+        const dot = document.createElement('span')
+        dot.id = 'ligui-titlebar-dot'
+        label.append(dot, document.createTextNode('LIGUI'))
+        document.head.appendChild(style)
+        document.body.appendChild(label)
+        return () => {
+          label.remove()
+          style.remove()
+        }
+      })
     }
 
     exports.apply = apply
