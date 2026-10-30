@@ -96,8 +96,8 @@ needed. Start from the upstream guide:
 
 ## Theme
 
-The Web UI boots with a Ligui skin: near-black, green-tinted surfaces, one acid
-green accent, tighter corners (3–18px instead of the stock 4–28px), and faster
+The Web UI boots with a Ligui skin: near-black surfaces with a red undertone, a hot-rod red
+primary, warm white text, and sparing orange/yellow highlights, tighter corners (3–18px instead of the stock 4–28px), and faster
 motion (0.09s / 0.14s / 0.22s instead of 0.1s / 0.2s / 0.3s).
 
 `client.js` registers one `ctx.theme.overrideTokens` layer over the active
@@ -344,7 +344,7 @@ graph, not embeddings.
 The Electron window is frameless on Windows (`frame: false`). `client.js` draws
 the 40px title strip and its own minimize, maximize/restore, and close buttons;
 `desktop/preload.js` exposes the window IPC bridge, and `desktop/main.js` owns
-the handlers. The strip is a drag region with a green hairline, and
+the handlers. The strip is a drag region with an orange hairline, and
 `data-windows-titlebar` pads the dsh columns below it.
 
 The sidebar brand is **厉鬼** only — no ghost mark and no Latin wordmark. The

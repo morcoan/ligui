@@ -145,7 +145,7 @@ function createWindow(url) {
     minWidth: 980,
     minHeight: 640,
     title: '厉鬼',
-    backgroundColor: '#0a0d0b',
+    backgroundColor: '#0a0607',
     frame: false,
     hasShadow: true,
     webPreferences: {

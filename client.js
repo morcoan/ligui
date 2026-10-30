@@ -22,70 +22,70 @@ window.__ModuleLoader__.load({
     const p = (light, dark) => ({ light, dark })
 
     const TOKENS = {
-      // Surfaces
-      '--dsw-alias-bg-base': p('#f6f8f3', '#0a0d0b'),
-      '--dsw-alias-bg-layer-1': p('#ffffff', '#101412'),
-      '--dsw-alias-bg-layer-2': p('#eef2ec', '#161b18'),
-      '--dsw-alias-bg-layer-3': p('#e7ece5', '#1c221e'),
-      '--dsw-alias-bg-overlay': p('#ffffff', '#121714'),
-      '--dsw-alias-bg-skeleton': p('#e9eee7', '#1a201c'),
-      '--dsw-specific-sidebar-fill': p('#f0f4ee', '#0d100e'),
-      '--dsw-specific-bubble': p('#e9efe7', '#131a15'),
-      '--dsw-specific-input-major': p('#ffffff', '#101412'),
-      '--dsw-specific-menu': p('#ffffff', '#121714'),
-      '--dsw-menu-surface-fill': p('rgba(255, 255, 255, 0.96)', 'rgba(18, 23, 20, 0.94)'),
+      // Surfaces — black glass over a red undertone
+      '--dsw-alias-bg-base': p('#f7f0ea', '#0a0607'),
+      '--dsw-alias-bg-layer-1': p('#fffaf5', '#120a0c'),
+      '--dsw-alias-bg-layer-2': p('#f1e7e1', '#1a0e11'),
+      '--dsw-alias-bg-layer-3': p('#e9ddd5', '#241316'),
+      '--dsw-alias-bg-overlay': p('#fffdf9', '#140b0d'),
+      '--dsw-alias-bg-skeleton': p('#efe4dd', '#1c0f12'),
+      '--dsw-specific-sidebar-fill': p('#f2e9e2', '#0d0709'),
+      '--dsw-specific-bubble': p('#f0e4de', '#170c0f'),
+      '--dsw-specific-input-major': p('#fffdf9', '#120a0c'),
+      '--dsw-specific-menu': p('#fffdf9', '#140b0d'),
+      '--dsw-menu-surface-fill': p('rgba(255, 253, 249, 0.96)', 'rgba(20, 11, 13, 0.96)'),
 
-      // Borders
-      '--dsw-alias-border-l1': p('rgba(18, 26, 20, 0.10)', 'rgba(232, 238, 233, 0.08)'),
-      '--dsw-alias-border-l2': p('rgba(18, 26, 20, 0.18)', 'rgba(232, 238, 233, 0.14)'),
-      '--dsw-alias-border-l3': p('rgba(18, 26, 20, 0.26)', 'rgba(232, 238, 233, 0.20)'),
-      '--dsw-alias-border-l4': p('rgba(18, 26, 20, 0.34)', 'rgba(232, 238, 233, 0.28)'),
+      // Borders — warm white hairlines
+      '--dsw-alias-border-l1': p('rgba(40, 16, 16, 0.10)', 'rgba(255, 237, 229, 0.08)'),
+      '--dsw-alias-border-l2': p('rgba(40, 16, 16, 0.18)', 'rgba(255, 237, 229, 0.14)'),
+      '--dsw-alias-border-l3': p('rgba(40, 16, 16, 0.26)', 'rgba(255, 237, 229, 0.20)'),
+      '--dsw-alias-border-l4': p('rgba(40, 16, 16, 0.34)', 'rgba(255, 237, 229, 0.28)'),
 
-      // Text
-      '--dsw-alias-label-primary': p('#121814', '#e8eee9'),
-      '--dsw-alias-label-secondary': p('#47534a', '#a3afa6'),
-      '--dsw-alias-label-tertiary': p('#66726a', '#7c887f'),
-      '--dsw-alias-label-caption': p('#7b877f', '#667269'),
-      '--dsw-alias-label-dimmed': p('#7b877f', '#667269'),
+      // Text — warm white, never pure gray
+      '--dsw-alias-label-primary': p('#1b0f0f', '#f6ede7'),
+      '--dsw-alias-label-secondary': p('#5b4543', '#c8b5ad'),
+      '--dsw-alias-label-tertiary': p('#826b65', '#987f77'),
+      '--dsw-alias-label-caption': p('#927b74', '#816b64'),
+      '--dsw-alias-label-dimmed': p('#927b74', '#816b64'),
 
-      // Brand, links, states
-      '--dsw-alias-brand-primary': p('#3d7a00', '#b8ff3d'),
-      '--dsw-alias-brand-text': p('#ffffff', '#0a0d0b'),
-      '--dsw-alias-link': p('#336b00', '#b8ff3d'),
-      '--dsw-alias-state-success-primary': p('#1f8a4c', '#5ee08c'),
-      '--dsw-alias-state-warn-primary': p('#9a6400', '#ffc857'),
-      '--dsw-alias-state-error-primary': p('#c02f2f', '#ff6b6b'),
-      '--dsw-alias-state-idle-primary': p('#66726a', '#7c887f'),
+      // Brand, links, states — red primary, orange links, yellow success
+      '--dsw-alias-brand-primary': p('#b3121c', '#e01f2d'),
+      '--dsw-alias-brand-text': p('#fffaf5', '#fff8f2'),
+      '--dsw-alias-link': p('#b45309', '#ff7a1a'),
+      '--dsw-alias-state-success-primary': p('#a16207', '#ffc21a'),
+      '--dsw-alias-state-warn-primary': p('#b45309', '#ff7a1a'),
+      '--dsw-alias-state-error-primary': p('#c02f2f', '#ff4d4d'),
+      '--dsw-alias-state-idle-primary': p('#826b65', '#8a7570'),
 
       // Buttons
-      '--dsw-alias-button-primary-fill': p('#3d7a00', '#b8ff3d'),
-      '--dsw-alias-button-primary-hover': p('#4c9400', '#c9ff66'),
-      '--dsw-alias-button-primary-dimmed': p('rgba(61, 122, 0, 0.30)', 'rgba(184, 255, 61, 0.35)'),
-      '--dsw-alias-button-contrast-fill': p('#121814', '#e8eee9'),
+      '--dsw-alias-button-primary-fill': p('#b3121c', '#c91824'),
+      '--dsw-alias-button-primary-hover': p('#d01824', '#e01f2d'),
+      '--dsw-alias-button-primary-dimmed': p('rgba(179, 18, 28, 0.30)', 'rgba(224, 31, 45, 0.35)'),
+      '--dsw-alias-button-contrast-fill': p('#1b0f0f', '#f6ede7'),
 
       // Code and diffs
-      '--dsw-alias-markdown-code-block': p('#eef2ec', '#0e120f'),
-      '--dsw-alias-markdown-inline-code': p('#e4eae2', '#1a201b'),
-      '--dsw-alias-code-diff-added': p('#1f8a4c', '#5ee08c'),
-      '--dsw-alias-code-diff-deleted': p('#c02f2f', '#ff6b6b'),
+      '--dsw-alias-markdown-code-block': p('#f1e7e1', '#120a0c'),
+      '--dsw-alias-markdown-inline-code': p('#e9ddd5', '#1e1013'),
+      '--dsw-alias-code-diff-added': p('#a16207', '#ffc21a'),
+      '--dsw-alias-code-diff-deleted': p('#c02f2f', '#ff4d4d'),
 
       // Menus, toasts, turn triggers
-      '--dsw-alias-tooltip-bg': p('#121814', '#1a201b'),
-      '--dsw-alias-toast-bg': p('#121814', '#1a201b'),
-      '--dsw-alias-toast-label': p('#f6f8f3', '#e8eee9'),
-      '--dsw-alias-turn-trigger-bg': p('#e9efe7', '#131a15'),
-      '--dsw-alias-turn-trigger-bg-hover': p('#e0e8de', '#1a221b'),
+      '--dsw-alias-tooltip-bg': p('#1b0f0f', '#1a0e11'),
+      '--dsw-alias-toast-bg': p('#1b0f0f', '#1a0e11'),
+      '--dsw-alias-toast-label': p('#fffaf5', '#f6ede7'),
+      '--dsw-alias-turn-trigger-bg': p('#f1e7e1', '#160c0f'),
+      '--dsw-alias-turn-trigger-bg-hover': p('#e9ddd5', '#1f1013'),
 
-      // Interaction
-      '--dsw-alias-interactive-bg-hover': p('rgba(61, 122, 0, 0.08)', 'rgba(184, 255, 61, 0.08)'),
-      '--dsw-alias-interactive-bg-active': p('rgba(61, 122, 0, 0.14)', 'rgba(184, 255, 61, 0.14)'),
-      '--dsw-alias-interactive-bg-hover-accent': p('rgba(61, 122, 0, 0.16)', 'rgba(184, 255, 61, 0.16)'),
-      '--dsw-specific-sidebar-nav-item-active': p('rgba(61, 122, 0, 0.10)', 'rgba(184, 255, 61, 0.12)'),
-      '--dsw-specific-sidebar-nav-item-active-accent': p('#3d7a00', '#b8ff3d'),
+      // Interaction — red wash with orange accents
+      '--dsw-alias-interactive-bg-hover': p('rgba(179, 18, 28, 0.08)', 'rgba(224, 31, 45, 0.10)'),
+      '--dsw-alias-interactive-bg-active': p('rgba(179, 18, 28, 0.14)', 'rgba(224, 31, 45, 0.18)'),
+      '--dsw-alias-interactive-bg-hover-accent': p('rgba(194, 65, 12, 0.16)', 'rgba(255, 122, 26, 0.18)'),
+      '--dsw-specific-sidebar-nav-item-active': p('rgba(179, 18, 28, 0.10)', 'rgba(224, 31, 45, 0.12)'),
+      '--dsw-specific-sidebar-nav-item-active-accent': p('#b3121c', '#e01f2d'),
 
       // Scrollbars
-      '--dsw-alias-scrollbar-bg-l1': p('rgba(18, 26, 20, 0.14)', 'rgba(232, 238, 233, 0.10)'),
-      '--dsw-alias-scrollbar-hover-l1': p('rgba(18, 26, 20, 0.26)', 'rgba(232, 238, 233, 0.22)'),
+      '--dsw-alias-scrollbar-bg-l1': p('rgba(40, 16, 16, 0.14)', 'rgba(255, 237, 229, 0.10)'),
+      '--dsw-alias-scrollbar-hover-l1': p('rgba(40, 16, 16, 0.26)', 'rgba(255, 237, 229, 0.22)'),
 
       // Density: tighter corners than the stock 4/8/12/16/20/28 scale
       '--dsw-radius-xs': p('3px', '3px'),
@@ -156,11 +156,11 @@ window.__ModuleLoader__.load({
         const api = window.ligui && window.ligui.window
         if (!api) return
         const style = document.createElement('style')
-        style.textContent = `#ligui-titlebar{position:fixed;top:0;left:0;right:0;height:var(--dsh-windows-titlebar-height,40px);display:flex;align-items:center;justify-content:flex-end;z-index:2147483000;background:linear-gradient(90deg,rgba(184,255,61,.07) 0%,rgba(184,255,61,0) 32%),var(--dsw-specific-sidebar-fill,#0d100e);border-bottom:1px solid var(--dsw-alias-border-l1,rgba(255,255,255,.08));box-shadow:inset 0 -1px 0 rgba(184,255,61,.14);-webkit-app-region:drag;user-select:none}
+        style.textContent = `#ligui-titlebar{position:fixed;top:0;left:0;right:0;height:var(--dsh-windows-titlebar-height,40px);display:flex;align-items:center;justify-content:flex-end;z-index:2147483000;background:linear-gradient(90deg,rgba(224,31,45,.12) 0%,rgba(224,31,45,0) 32%),var(--dsw-specific-sidebar-fill,#0d0709);border-bottom:1px solid var(--dsw-alias-border-l1,rgba(255,255,255,.08));box-shadow:inset 0 -1px 0 rgba(255,122,26,.28);-webkit-app-region:drag;user-select:none}
 #ligui-titlebar .ligui-titlebar-controls{display:flex;height:100%;-webkit-app-region:no-drag}
 #ligui-titlebar .ligui-titlebar-button{width:46px;height:100%;display:flex;align-items:center;justify-content:center;border:0;background:transparent;color:var(--dsw-alias-label-secondary,#a3afa6);cursor:pointer;padding:0;transition:background var(--ds-transition-duration-fast,.09s) var(--ds-ease-in-out),color var(--ds-transition-duration-fast,.09s)}
-#ligui-titlebar .ligui-titlebar-button:hover{background:var(--dsw-alias-interactive-bg-hover,rgba(184,255,61,.08));color:var(--dsw-alias-label-primary,#e8eee9)}
-#ligui-titlebar .ligui-titlebar-close:hover{background:var(--dsw-alias-state-error-primary,#c02f2f);color:#fff}
+#ligui-titlebar .ligui-titlebar-button:hover{background:var(--dsw-alias-interactive-bg-hover,rgba(224,31,45,.10));color:var(--dsw-alias-label-primary,#f6ede7)}
+#ligui-titlebar .ligui-titlebar-close:hover{background:var(--dsw-alias-state-error-primary,#ff4d4d);color:#fff}
 #ligui-titlebar .ligui-titlebar-button svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:1.2;stroke-linecap:round}
 #ligui-titlebar .ligui-titlebar-close svg{width:10px;height:10px}
 #ligui-frame{position:fixed;inset:0;border:1px solid var(--dsw-alias-border-l1,rgba(255,255,255,.08));pointer-events:none;z-index:2147483001;box-sizing:border-box}`
