@@ -13,7 +13,7 @@ window.__ModuleLoader__.load({
   factory: (require) => {
     const module = { exports: {} }
     const exports = module.exports
-    const { jsx, jsxs } = require('react/jsx-runtime')
+    const { jsx } = require('react/jsx-runtime')
 
     /** Required service: the theme registry over the --dsw-* token sheets. */
     const inject = ['theme', 'slots']
@@ -102,59 +102,18 @@ window.__ModuleLoader__.load({
       '--ds-ease-in-out': p('cubic-bezier(0.2, 0, 0, 1)', 'cubic-bezier(0.2, 0, 0, 1)'),
     }
 
-    const GHOST_PATH = 'M4 3.5C4 2.67 4.67 2 5.5 2h13c.83 0 1.5.67 1.5 1.5v16.2c0 .42-.48.66-.82.4L16.6 18l-2.2 1.8a.62.62 0 0 1-.79 0L11.4 18l-2.2 1.8a.62.62 0 0 1-.79 0L6.2 18l-1.38 1.1c-.34.26-.82.02-.82-.4V3.5z'
-
-    function LiguiMark(props) {
-      const size = Number(props && props.size) || 22
-      return jsxs('svg', {
-        width: size,
-        height: size,
-        viewBox: '0 0 24 24',
-        className: props && props.className,
-        'aria-hidden': 'true',
-        children: [
-          jsx('path', { d: GHOST_PATH, fill: 'currentColor' }),
-          jsx('rect', {
-            x: 7.4, y: 7.6, width: 2.6, height: 3.4, rx: 0.8,
-            style: { fill: 'var(--dsw-alias-brand-primary, #b8ff3d)' },
-          }),
-          jsx('rect', {
-            x: 14, y: 7.6, width: 2.6, height: 3.4, rx: 0.8,
-            style: { fill: 'var(--dsw-alias-brand-primary, #b8ff3d)' },
-          }),
-        ],
-      })
-    }
 
     function LiguiName() {
-      return jsxs('span', {
+      return jsx('span', {
         style: {
-          display: 'inline-flex',
-          alignItems: 'baseline',
-          gap: '7px',
           fontFamily: '"KaiTi", "STKaiti", "SimSun", serif',
+          fontSize: '1.3rem',
+          fontWeight: 700,
+          letterSpacing: '0.12em',
+          lineHeight: 1,
+          color: 'var(--dsw-alias-label-primary)',
         },
-        children: [
-          jsx('span', {
-            style: {
-              fontSize: '1.12rem',
-              fontWeight: 700,
-              letterSpacing: '0.08em',
-              color: 'var(--dsw-alias-label-primary)',
-            },
-            children: '厉鬼',
-          }),
-          jsx('span', {
-            style: {
-              fontFamily: 'ui-monospace, SFMono-Regular, Menlo, monospace',
-              fontSize: '0.55rem',
-              fontWeight: 600,
-              letterSpacing: '0.2em',
-              color: 'var(--dsw-alias-label-tertiary)',
-            },
-            children: 'LIGUI',
-          }),
-        ],
+        children: '厉鬼',
       })
     }
     /**
@@ -163,13 +122,14 @@ window.__ModuleLoader__.load({
      */
     function apply(ctx) {
       ctx.effect(() => ctx.theme.overrideTokens('dsh-ligui', TOKENS))
+      const NoMark = () => null
       ctx.slots.inject('sidebar.brand.mark', () =>
-        ctx.slots.inject('sidebar.brand.name', () =>
-          ctx.slots.inject('conversation.hero.brand.mark', function* () {
-            yield ctx.slots.register({ name: 'sidebar.brand.mark' }, LiguiMark)
-            yield ctx.slots.register({ name: 'sidebar.brand.name' }, LiguiName)
-            yield ctx.slots.register({ name: 'conversation.hero.brand.mark' }, LiguiMark)
-          })))
+        ctx.slots.inject('conversation.hero.brand.mark', function* () {
+          yield ctx.slots.register({ name: 'sidebar.brand.mark' }, NoMark)
+          yield ctx.slots.register({ name: 'conversation.hero.brand.mark' }, NoMark)
+        }))
+      ctx.slots.inject('sidebar.brand.name', () =>
+        ctx.slots.register({ name: 'sidebar.brand.name' }, LiguiName))
       ctx.effect(() => {
         const pairs = [
           ['DeepSeek Harness', 'Ligui'],
@@ -196,10 +156,7 @@ window.__ModuleLoader__.load({
         const api = window.ligui && window.ligui.window
         if (!api) return
         const style = document.createElement('style')
-        style.textContent = `#ligui-titlebar{position:fixed;top:0;left:0;right:0;height:var(--dsh-windows-titlebar-height,40px);display:flex;align-items:center;justify-content:space-between;z-index:2147483000;background:linear-gradient(90deg,rgba(184,255,61,.07) 0%,rgba(184,255,61,0) 32%),var(--dsw-specific-sidebar-fill,#0d100e);border-bottom:1px solid var(--dsw-alias-border-l1,rgba(255,255,255,.08));box-shadow:inset 0 -1px 0 rgba(184,255,61,.14);-webkit-app-region:drag;user-select:none}
-#ligui-titlebar .ligui-titlebar-brand{display:flex;align-items:baseline;gap:9px;padding-left:16px;pointer-events:none;white-space:nowrap}
-#ligui-titlebar .ligui-titlebar-dot{width:6px;height:6px;border-radius:50%;background:var(--dsw-alias-brand-primary,#b8ff3d);box-shadow:0 0 10px rgba(184,255,61,.45);align-self:center}
-#ligui-titlebar .ligui-titlebar-latin{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:9px;font-weight:600;letter-spacing:.22em;color:var(--dsw-alias-label-tertiary,#7c887f)}
+        style.textContent = `#ligui-titlebar{position:fixed;top:0;left:0;right:0;height:var(--dsh-windows-titlebar-height,40px);display:flex;align-items:center;justify-content:flex-end;z-index:2147483000;background:linear-gradient(90deg,rgba(184,255,61,.07) 0%,rgba(184,255,61,0) 32%),var(--dsw-specific-sidebar-fill,#0d100e);border-bottom:1px solid var(--dsw-alias-border-l1,rgba(255,255,255,.08));box-shadow:inset 0 -1px 0 rgba(184,255,61,.14);-webkit-app-region:drag;user-select:none}
 #ligui-titlebar .ligui-titlebar-controls{display:flex;height:100%;-webkit-app-region:no-drag}
 #ligui-titlebar .ligui-titlebar-button{width:46px;height:100%;display:flex;align-items:center;justify-content:center;border:0;background:transparent;color:var(--dsw-alias-label-secondary,#a3afa6);cursor:pointer;padding:0;transition:background var(--ds-transition-duration-fast,.09s) var(--ds-ease-in-out),color var(--ds-transition-duration-fast,.09s)}
 #ligui-titlebar .ligui-titlebar-button:hover{background:var(--dsw-alias-interactive-bg-hover,rgba(184,255,61,.08));color:var(--dsw-alias-label-primary,#e8eee9)}
@@ -209,14 +166,6 @@ window.__ModuleLoader__.load({
 #ligui-frame{position:fixed;inset:0;border:1px solid var(--dsw-alias-border-l1,rgba(255,255,255,.08));pointer-events:none;z-index:2147483001;box-sizing:border-box}`
         const bar = document.createElement('div')
         bar.id = 'ligui-titlebar'
-        const brand = document.createElement('div')
-        brand.className = 'ligui-titlebar-brand'
-        const dot = document.createElement('span')
-        dot.className = 'ligui-titlebar-dot'
-        const latin = document.createElement('span')
-        latin.className = 'ligui-titlebar-latin'
-        latin.textContent = 'LIGUI'
-        brand.append(dot, latin)
 
         const makeButton = (kind, label, svg) => {
           const button = document.createElement('button')
@@ -236,7 +185,7 @@ window.__ModuleLoader__.load({
         const controls = document.createElement('div')
         controls.className = 'ligui-titlebar-controls'
         controls.append(minimize, maximize, close)
-        bar.append(brand, controls)
+        bar.append(controls)
 
         const frame = document.createElement('div')
         frame.id = 'ligui-frame'

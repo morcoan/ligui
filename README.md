@@ -347,11 +347,11 @@ the 40px title strip and its own minimize, maximize/restore, and close buttons;
 the handlers. The strip is a drag region with a green hairline, and
 `data-windows-titlebar` pads the dsh columns below it.
 
-The brand is **厉鬼** in the sidebar and conversation hero, with a ghost mark
-and a small **LIGUI** label. The title strip carries `● LIGUI`; the window and
-taskbar title is 厉鬼. The official DeepSeek brand occupants are disabled, and a
-small brand-text pass renames the first-run “DeepSeek account/Harness” copy at
-runtime.
+The sidebar brand is **厉鬼** only — no ghost mark and no Latin wordmark. The
+conversation hero mark slot is deliberately empty. The title strip is unlabeled
+and carries only the window controls; the window and taskbar title is 厉鬼. The
+official DeepSeek brand occupants are disabled, and a small brand-text pass
+renames the first-run “DeepSeek account/Harness” copy at runtime.
 
 The app menu is removed; F12 toggles DevTools and Ctrl+R reloads. Still
 default: the taskbar icon is Electron's; a custom `.ico` is the remaining
