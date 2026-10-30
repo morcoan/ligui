@@ -52,6 +52,14 @@
         "to": "ligui/client.js"
       },
       {
+        "from": "../native/ligui-input.exe",
+        "to": "ligui/native/ligui-input.exe"
+      },
+      {
+        "from": "../native/interception.dll",
+        "to": "ligui/native/interception.dll"
+      },
+      {
         "from": "../package.json",
         "to": "ligui/package.json"
       }

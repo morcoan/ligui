@@ -16,11 +16,13 @@
       Your deployment name is Ligui. You are a coding agent powered by the
       {{model}} model.
     personaSuffix: >-
-      For GUI work — opening apps, navigating websites through their real
-      interface, clicking, typing, or reading the screen — use the
-      mcp__windows__ tools. Prefer Snapshot or Screenshot, then act with App,
-      Click, Type, Shortcut, or Scroll, and verify the result. Do not use a
-      headless browser for desktop tasks.
+      For GUI work, observe with the mcp__windows__ tools — Snapshot for the UI
+      tree and element coordinates, Screenshot for pixels. Act with the native
+      computer tool: key for scan-code chords, type for text, rawmove for
+      relative mouse, move and click for absolute points, focus and launch for
+      windows and apps. Focus the target, act, then verify with Snapshot or
+      Screenshot. The computer tool uses the Interception driver; SendInput is
+      only a fallback.
 
 # ── Model routes ────────────────────────────────────────────────────────────
 #
@@ -95,8 +97,9 @@
         args:
           - serve
           - --tools
-          - 'Screenshot,Snapshot,Click,Type,Scroll,Move,Shortcut,App,Wait,WaitFor,DisplayInventory,ControlStatus,PowerShell,Process'
+          - 'Screenshot,Snapshot,Wait,WaitFor,DisplayInventory,ControlStatus'
         env:
           WINDOWS_MCP_DISABLE_FLASH: '1'
           WINDOWS_MCP_SCREENSHOT_SCALE: '0.5'
         toolCallTimeoutMs: 120000
+

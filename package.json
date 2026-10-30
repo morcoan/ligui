@@ -21,7 +21,8 @@
   "files": [
     "cordis.patch.yml",
     "index.js",
-    "client.js"
+    "client.js",
+    "native/ligui-input.exe"
   ],
   "engines": {
     "dsh": ">=0.2.0 <0.3.0",

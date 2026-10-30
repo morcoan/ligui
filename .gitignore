@@ -8,3 +8,6 @@ desktop/node_modules/
 desktop/runtime/
 desktop/dist/
 desktop/*.log
+native/*.exe
+native/*.dll
+native/*.o

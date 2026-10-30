@@ -14,7 +14,8 @@ dependency update rather than a merge.
 |---|---|
 | `cordis.patch.yml` | The composition layer: persona, provider routes, theme row |
 | `client.js` | Browser half: the Ligui theme's `--dsw-*` token layer |
-| `index.js` | Node half: the empty Loader row the client scanner keys on |
+| `index.js` | Host half: the Loader row, plus the native `computer` tool |
+| `native/` | C input helper: Interception driver, SendInput fallback |
 | `package.json` | The `dsh.bundle` + `dsh.client` manifest |
 | `examples/custom-routes.example.yml` | Shapes for OpenAI Chat/Responses and Anthropic Messages gateways |
 
@@ -158,7 +159,86 @@ boot with `unsupported Electron runtime fingerprint`.
 
 The shell is not code-signed, so Windows SmartScreen may warn on first launch.
 
+
 ## Native computer use
+
+Ligui drives the real Windows desktop. Observation and input use two paths:
+
+| Path | Backend | Tools |
+|---|---|---|
+| Observe | Windows-MCP (UI Automation) | `mcp__windows__Snapshot`, `Screenshot`, `Wait`, `WaitFor`, `DisplayInventory`, `ControlStatus` |
+| Act | `native/ligui-input.exe` (Interception) | `computer` |
+
+The native helper sends **scan-code** key strokes and raw mouse strokes through
+the [Interception](https://github.com/oblitum/Interception) keyboard/mouse filter
+driver. That is the path that reaches applications which ignore `SendInput`
+(the AION 2 client does). `SendInput` remains the fallback when the driver or
+DLL is missing.
+
+### Build the helper
+
+The helper is C and builds with gcc (MinGW-w64):
+
+```sh
+INTERCEPTION_DLL=D:\autoauto\third_party\interception\library\x64\interception.dll \
+  ./native/build.sh
+```
+
+This produces `native/ligui-input.exe` and copies `interception.dll` beside it.
+The DLL is third-party and is not committed. Check the driver:
+
+```sh
+./native/ligui-input.exe status
+# {"ok":true,"backend":"interception","driverLoaded":true,...}
+```
+
+The Interception driver is installed separately (`INSTALL.cmd` as admin, then
+reboot); [`native/README.md`](native/README.md) covers the details.
+
+### The `computer` tool
+
+`computer` takes one `action` plus optional fields:
+
+| Action | Fields | Does |
+|---|---|---|
+| `status` | — | Driver, device, and DLL state |
+| `display`, `cursor`, `windows`, `active` | — | Desktop and window inspection |
+| `focus` | `title` or `hwnd` | Bring a window to the foreground |
+| `launch` | `target`, `args` | Start an app, document, or URL |
+| `key` | `key` | Scan-code key or chord (`f`, `shift+w`, `ctrl+shift+esc`, `alt+f4`) |
+| `keydown` / `keyup` | `key` | Hold or release one key |
+| `type` | `text` | Type text (ASCII scan codes, Unicode via SendInput) |
+| `move` | `x`, `y` | Absolute primary-screen point |
+| `rawmove` | `dx`, `dy` | Relative mouse (camera/aiming) |
+| `click` | `x`, `y`, `button`, `count` | Click a point |
+| `down` / `up` | `button` | Hold or release a button |
+| `scroll` | `amount` | Wheel notches |
+| `releaseall` | — | Release common keys and all mouse buttons |
+
+The agent is instructed to `Snapshot` first, `focus` the target, act with
+`computer`, then `Snapshot` again to verify.
+
+### Install Windows-MCP
+
+The observation half is a Python MCP server:
+
+```sh
+uv tool install windows-mcp
+```
+
+`uv` installs Python 3.14 for it when needed. The desktop shell adds
+`%USERPROFILE%\.local\bin` to the dsh server PATH.
+
+### Risk
+
+This is full desktop control. The native path sends input at the driver level
+and does not implement Windows-MCP's user-takeover gate. Call `releaseall` when
+a task stops, focus the intended window before acting, and keep a human stop
+(the app window, or kill `ligui-input.exe`).
+
+Interception is a kernel filter driver. Using it to automate a game can violate
+that game's terms and be detected; it is not an anti-cheat bypass and no
+guarantee is made. Prefer a disposable VM for untrusted prompts.
 
 Ligui can drive the actual Windows desktop — not a browser tab. The
 `mcp-windows` row mounts [Windows-MCP](https://github.com/CursorTouch/Windows-MCP)
