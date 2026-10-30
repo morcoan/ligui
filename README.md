@@ -270,3 +270,23 @@ Windows-MCP has a **user takeover** gate: moving the physical mouse or pressing
 not a sandbox — the agent can launch apps, type into anything, run PowerShell,
 read the clipboard, and change files. Only use it with prompts and models you
 trust; prefer a disposable VM for untrusted work.
+
+## Dedicated browser
+
+Ligui has its own Chromium instance and profile, separate from your Edge or
+Chrome windows. Playwright MCP drives it through the `mcp__browser__*` tools:
+`browser_navigate`, `browser_snapshot`, `browser_click`, `browser_type`,
+`browser_press_key`, `browser_tabs`, `browser_take_screenshot`,
+`browser_console_messages`, and `browser_network_requests`.
+
+The profile lives at `~/.dsh/ligui-browser`, so cookies and logins survive
+across sessions. Delete that directory to reset the browser.
+
+The server starts with `npx @playwright/mcp@0.0.80`. It prefers the newest
+Playwright Chromium under `%LOCALAPPDATA%\ms-playwright` and falls back to the
+installed Edge channel when no Playwright browser is present. Node/npx must be
+on `PATH`.
+
+Use the browser tools for websites; use the native `computer` tool only for
+desktop applications or OS-level input. The browser is not a security boundary:
+pages can read anything you log into, so treat the profile as its own account.

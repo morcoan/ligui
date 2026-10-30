@@ -23,6 +23,9 @@
       windows and apps. Focus the target, act, then verify with Snapshot or
       Screenshot. The computer tool uses the Interception driver; SendInput is
       only a fallback.
+      For web work, use the dedicated mcp__browser__browser_* tools and keep
+      their own browser untouched; use the native computer tool for desktop
+      apps or OS-level input.
 
 # ── Model routes ────────────────────────────────────────────────────────────
 #
@@ -103,3 +106,21 @@
           WINDOWS_MCP_SCREENSHOT_SCALE: '0.5'
         toolCallTimeoutMs: 120000
 
+
+# ── Dedicated browser ───────────────────────────────────────────────────────
+#
+# Playwright MCP owns a browser instance and a persistent profile under the
+# Harness home. It prefers the newest Playwright Chromium on the machine and
+# falls back to the installed Edge channel. The model sees
+# mcp__browser__browser_* tools: navigate, snapshot, click, type, tabs,
+# screenshot, console/network inspection, and file upload.
+
+- insert:
+    - id: mcp-browser
+      name: '@deepseek-ai/dsh-mcp-client'
+      config:
+        serverName: browser
+        transport: stdio
+        command: npx
+        args: !!js "(() => { const fs = process.getBuiltinModule('node:fs'); const path = process.getBuiltinModule('node:path'); const base = ['-y', '@playwright/mcp@0.0.80', '--user-data-dir', dshHomePath('ligui-browser'), '--viewport-size', '1440,900']; const root = path.join(process.env.LOCALAPPDATA || '', 'ms-playwright'); const dirs = fs.existsSync(root) ? fs.readdirSync(root).filter(d => d.startsWith('chromium-')).sort().reverse() : []; for (const d of dirs) { const exe = path.join(root, d, 'chrome-win64', 'chrome.exe'); if (fs.existsSync(exe)) return [...base, '--executable-path', exe]; } return [...base, '--browser', 'msedge']; })()"
+        toolCallTimeoutMs: 120000
