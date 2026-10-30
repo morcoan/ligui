@@ -16,6 +16,8 @@ dependency update rather than a merge.
 | `client.js` | Browser half: the Ligui theme's `--dsw-*` token layer |
 | `index.js` | Host half: the Loader row, plus the native `computer` tool |
 | `native/` | C input helper: Interception driver, SendInput fallback |
+| `skills/` | Global skill templates for memory and self-improvement |
+| `scripts/install-skills.sh` | Installs those templates into `~/.dsh/skills` |
 | `package.json` | The `dsh.bundle` + `dsh.client` manifest |
 | `examples/custom-routes.example.yml` | Shapes for OpenAI Chat/Responses and Anthropic Messages gateways |
 
@@ -290,3 +292,49 @@ on `PATH`.
 Use the browser tools for websites; use the native `computer` tool only for
 desktop applications or OS-level input. The browser is not a security boundary:
 pages can read anything you log into, so treat the profile as its own account.
+
+## Persistent memory and skills
+
+Ligui keeps a local, cross-project brain under `~/.dsh`:
+
+| What | Where | Tools |
+|---|---|---|
+| Memory graph | `~/.dsh/ligui-memory.jsonl` | `mcp__memory__search_nodes`, `open_nodes`, `create_entities`, `add_observations`, `create_relations`, `read_graph` |
+| Global skills | `~/.dsh/skills/<name>/SKILL.md` | `skill` catalog and loader |
+
+### Memory
+
+The graph stores `User`, `Project:<name>`, `Workflow:<name>`, `Command:<name>`,
+and `Lesson:<topic>` entities with observations and relations. It is plain
+local JSONL; nothing leaves the machine.
+
+At the start of a task the agent searches it for the user and the project. When
+you say “remember …”, correct it, or it discovers a durable preference, it
+writes an observation. Say “remember that I prefer X” to seed it.
+
+Never store passwords, tokens, or keys. Delete the JSONL to reset.
+
+### Skills
+
+Global skills live in `~/.dsh/skills` and are discovered in every project. The
+repo ships two:
+
+- `ligui-memory` — the entity schema, what to recall, what to store, and the
+  no-secrets rule.
+- `ligui-self-improve` — when and how to turn a successful approach or a
+  correction into a new skill, including the `SKILL.md` template.
+
+The agent writes new skills with the normal file tools; the skill catalog
+watches the directory and updates without a restart. Install the templates on
+another machine with:
+
+```sh
+./scripts/install-skills.sh
+```
+
+### Limits
+
+This is deliberate memory, not fine-tuning or automatic summarization. The
+agent must search before a task and write after learning; the persona and the
+two skills tell it to. Retrieval is case-insensitive substring search over the
+graph, not embeddings.

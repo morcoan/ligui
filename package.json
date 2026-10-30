@@ -22,7 +22,9 @@
     "cordis.patch.yml",
     "index.js",
     "client.js",
-    "native/ligui-input.exe"
+    "native/ligui-input.exe",
+    "skills",
+    "scripts/install-skills.sh"
   ],
   "engines": {
     "dsh": ">=0.2.0 <0.3.0",
